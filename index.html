@@ -1,11 +1,68 @@
-<html>
-	<body>
-	
-		<div>
-			<ul>
-				<li>bricks</li>
-				<li>mortar</li>	
-			</ul>
-		</div>
-	</body>
-<html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your Business - Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="logo" href="/">Your Business</a>
+      <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>We help you achieve more with less effort</h1>
+        <p>High‑quality services tailored to your needs. Fast turnaround, clear communication, measurable results.</p>
+        <a class="btn primary" href="/contact.html">Get a free quote</a>
+      </div>
+    </section>
+
+    <section class="features">
+      <div class="container grid-3">
+        <div class="card">
+          <h3>Reliable</h3>
+          <p>On‑time delivery and consistent quality you can count on.</p>
+        </div>
+        <div class="card">
+          <h3>Experienced</h3>
+          <p>Years of hands‑on expertise across diverse industries.</p>
+        </div>
+        <div class="card">
+          <h3>Transparent</h3>
+          <p>Clear pricing and communication from day one.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="container">
+        <h2>Ready to start?</h2>
+        <p>Tell us about your project and we’ll get back within 1 business day.</p>
+        <a class="btn secondary" href="/contact.html">Contact us</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© <span id="year"></span> Your Business. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
