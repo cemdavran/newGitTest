@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ucd Components - About</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="logo" href="index.html"><img src="./assets/img/Ucd.png" alt="Ucd Components logo" class="logo-img" onerror="this.onerror=null; this.src='./assets/ima/Ucd.png';"><span class="logo-text">Ucd Components</span></a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a class="active" href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-header">
+      <div class="container">
+        <h1>About Ucd Components</h1>
+        <p>Company background, mission, and capabilities. Replace this copy with your own details.</p>
+      </div>
+    </section>
+
+    <section class="features">
+      <div class="container grid-3">
+        <div class="card">
+          <h3>Who we are</h3>
+          <p>Brief overview of your company, years in business, and what sets you apart.</p>
+        </div>
+        <div class="card">
+          <h3>What we do</h3>
+          <p>Core services: sourcing, distribution, quality assurance, logistics.</p>
+        </div>
+        <div class="card">
+          <h3>How we work</h3>
+          <p>Process outline: request → sourcing → verification → delivery.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="container">
+        <h2>Ready to talk?</h2>
+        <p>Tell us about your requirements and we’ll respond within 1 business day.</p>
+        <a class="btn primary" href="contact.html">Contact us</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© <span id="year"></span> Ucd Components. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
