@@ -43,6 +43,7 @@ img { max-width: 100%; display: block; }
   align-items: center;
   justify-content: space-between;
   padding: 0.9rem 0.25rem;
+  width: min(1280px, calc(100% - 2rem));
 }
 .logo {
   color: var(--text);
@@ -51,10 +52,11 @@ img { max-width: 100%; display: block; }
   letter-spacing: 0.3px;
   display: inline-flex;
   align-items: center;
+  font-size: 1.125rem;
 }
 
 .logo-img {
-  height: 28px;
+  height: 40px;
   width: auto;
   margin-right: 0.5rem;
   display: inline-block;
