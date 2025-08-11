@@ -265,3 +265,10 @@ input::placeholder, textarea::placeholder { color: #6b7280; }
   background: rgba(255,255,255,0.3);
 }
 .dot.active { background: var(--primary); border-color: var(--primary); }
+
+/* Push contact section toward the bottom of the page while keeping footer visible */
+main { display: flex; flex-direction: column; min-height: 70vh; }
+.hero { margin-bottom: 1.5rem; }
+.slideshow { margin-bottom: 1.5rem; }
+.categories { margin-bottom: 1.5rem; }
+.cta { margin-top: auto; padding-bottom: 3rem; }
