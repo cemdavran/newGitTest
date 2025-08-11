@@ -29,6 +29,15 @@
       </div>
     </section>
 
+    <section class="slideshow">
+      <div class="container">
+        <div class="slider" id="slider"></div>
+        <button class="slider-btn prev" aria-label="Previous" id="slider-prev">‹</button>
+        <button class="slider-btn next" aria-label="Next" id="slider-next">›</button>
+        <div class="slider-dots" id="slider-dots"></div>
+      </div>
+    </section>
+
     <section class="categories">
       <div class="container">
         <h2>What we supply</h2>
@@ -56,6 +65,94 @@
       <p>© <span id="year"></span> Ucd Components. All rights reserved.</p>
     </div>
   </footer>
+
+  <script>
+    (function(){
+      const sliderEl = document.getElementById('slider');
+      const dotsEl = document.getElementById('slider-dots');
+      const prevBtn = document.getElementById('slider-prev');
+      const nextBtn = document.getElementById('slider-next');
+      if (!sliderEl) return;
+
+      const folder = './assets/slideImg/';
+      const extensions = ['jpg','jpeg','png','webp','svg'];
+      const prefixes = ['slide-','', 'img'];
+      const candidateNames = [];
+      for (let i = 1; i <= 10; i++) {
+        for (const p of prefixes) {
+          for (const ext of extensions) {
+            candidateNames.push(`${p}${i}.${ext}`);
+          }
+        }
+      }
+
+      const loaded = [];
+      let pending = candidateNames.length;
+
+      function maybeInit() {
+        if (loaded.length === 0 && pending === 0) {
+          // No images found; hide controls
+          prevBtn?.classList.add('hidden');
+          nextBtn?.classList.add('hidden');
+          dotsEl?.classList.add('hidden');
+          return;
+        }
+        if (loaded.length > 0 && sliderEl.childElementCount === 0) {
+          // Build slides
+          loaded.forEach((src, idx) => {
+            const slide = document.createElement('div');
+            slide.className = 'slide' + (idx === 0 ? ' active' : '');
+            const img = document.createElement('img');
+            img.loading = 'lazy';
+            img.decoding = 'async';
+            img.src = src;
+            img.alt = `Slide ${idx + 1}`;
+            slide.appendChild(img);
+            sliderEl.appendChild(slide);
+            const dot = document.createElement('button');
+            dot.className = 'dot' + (idx === 0 ? ' active' : '');
+            dot.setAttribute('aria-label', `Go to slide ${idx + 1}`);
+            dot.addEventListener('click', () => goTo(idx));
+            dotsEl.appendChild(dot);
+          });
+          initControls();
+        }
+      }
+
+      candidateNames.forEach(name => {
+        const img = new Image();
+        img.onload = () => { loaded.push(folder + name); pending--; maybeInit(); };
+        img.onerror = () => { pending--; maybeInit(); };
+        img.src = folder + name;
+      });
+
+      let current = 0;
+      let timerId = null;
+
+      function show(index) {
+        const slides = sliderEl.querySelectorAll('.slide');
+        const dots = dotsEl.querySelectorAll('.dot');
+        if (slides.length === 0) return;
+        current = (index + slides.length) % slides.length;
+        slides.forEach((s, i) => s.classList.toggle('active', i === current));
+        dots.forEach((d, i) => d.classList.toggle('active', i === current));
+      }
+      function prev() { show(current - 1); }
+      function next() { show(current + 1); }
+      function goTo(i) { show(i); }
+
+      function initControls() {
+        prevBtn?.addEventListener('click', prev);
+        nextBtn?.addEventListener('click', next);
+        // autoplay
+        function start() { if (!timerId) timerId = setInterval(next, 5000); }
+        function stop() { if (timerId) { clearInterval(timerId); timerId = null; } }
+        sliderEl.addEventListener('mouseenter', stop);
+        sliderEl.addEventListener('mouseleave', start);
+        start();
+      }
+    })();
+  </script>
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
