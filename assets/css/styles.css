@@ -56,7 +56,7 @@ img { max-width: 100%; display: block; }
 }
 
 .logo-img {
-  height: 40px;
+  height: 52px;
   width: auto;
   margin-right: 0.5rem;
   display: inline-block;
@@ -64,9 +64,14 @@ img { max-width: 100%; display: block; }
 
 .logo-text {
   display: inline-block;
-  font-size: 1.375rem;
+  font-size: 1.75rem;
   font-weight: 800;
   letter-spacing: 0.2px;
+}
+
+@media (min-width: 1024px) {
+  .logo-img { height: 60px; }
+  .logo-text { font-size: 2rem; }
 }
 
 .nav a {
