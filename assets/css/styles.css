@@ -203,3 +203,8 @@ input::placeholder, textarea::placeholder { color: #6b7280; }
 @media (max-width: 640px) {
   .category-list { grid-template-columns: 1fr; }
 }
+
+/* Lighter background for homepage only */
+.home {
+  background: linear-gradient(180deg, #1a223a, #141d36 60%, #131b31 100%);
+}
