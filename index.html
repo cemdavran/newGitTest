@@ -51,7 +51,7 @@
       </div>
     </section>
 
-    <section class="cta">
+    <section class="cta" id="contact">
       <div class="container">
         <h2>Ready to start?</h2>
         <p>Tell us about your project and we’ll get back within 1 business day.</p>
@@ -76,55 +76,95 @@
 
       const folder = './assets/slideImg/';
       const extensions = ['jpg','jpeg','png','webp','svg'];
-      const prefixes = ['slide-','', 'img'];
-      const candidateNames = [];
-      for (let i = 1; i <= 10; i++) {
-        for (const p of prefixes) {
-          for (const ext of extensions) {
-            candidateNames.push(`${p}${i}.${ext}`);
+
+      function toSrc(path) {
+        if (/^https?:\/\//i.test(path) || path.startsWith('./') || path.startsWith('../') || path.startsWith('/')) {
+          return path;
+        }
+        return folder + path;
+      }
+
+      async function loadFromManualList() {
+        if (Array.isArray(window.SLIDES) && window.SLIDES.length > 0) {
+          return window.SLIDES.map(toSrc);
+        }
+        return null;
+      }
+
+      async function loadFromDirectoryListing() {
+        try {
+          const res = await fetch(folder, { method: 'GET' });
+          if (!res.ok) return null;
+          const html = await res.text();
+          const regex = /href=\"([^\"]+\.(?:jpg|jpeg|png|webp|svg))\"/gi;
+          const urls = new Set();
+          let m;
+          while ((m = regex.exec(html)) !== null) {
+            const name = m[1].replace(/^\/?/,'');
+            urls.add(folder + name);
           }
+          return urls.size ? Array.from(urls) : null;
+        } catch (_) {
+          return null;
         }
       }
 
-      const loaded = [];
-      let pending = candidateNames.length;
+      function loadFromCommonNames() {
+        const prefixes = ['slide-','', 'img', 'photo-', 'image-'];
+        const candidates = [];
+        for (let i = 1; i <= 20; i++) {
+          for (const p of prefixes) {
+            for (const ext of extensions) {
+              candidates.push(`${p}${i}.${ext}`);
+            }
+          }
+        }
+        return new Promise(resolve => {
+          const found = [];
+          let pending = candidates.length;
+          if (pending === 0) resolve(found);
+          candidates.forEach(name => {
+            const test = new Image();
+            test.onload = () => { found.push(folder + name); if (--pending === 0) resolve(found); };
+            test.onerror = () => { if (--pending === 0) resolve(found); };
+            test.src = folder + name + `?t=${Date.now()}`;
+          });
+        });
+      }
 
-      function maybeInit() {
-        if (loaded.length === 0 && pending === 0) {
-          // No images found; hide controls
+      function buildSlides(srcs) {
+        if (!srcs || srcs.length === 0) {
           prevBtn?.classList.add('hidden');
           nextBtn?.classList.add('hidden');
           dotsEl?.classList.add('hidden');
-          return;
+          return false;
         }
-        if (loaded.length > 0 && sliderEl.childElementCount === 0) {
-          // Build slides
-          loaded.forEach((src, idx) => {
-            const slide = document.createElement('div');
-            slide.className = 'slide' + (idx === 0 ? ' active' : '');
-            const img = document.createElement('img');
-            img.loading = 'lazy';
-            img.decoding = 'async';
-            img.src = src;
-            img.alt = `Slide ${idx + 1}`;
-            slide.appendChild(img);
-            sliderEl.appendChild(slide);
-            const dot = document.createElement('button');
-            dot.className = 'dot' + (idx === 0 ? ' active' : '');
-            dot.setAttribute('aria-label', `Go to slide ${idx + 1}`);
-            dot.addEventListener('click', () => goTo(idx));
-            dotsEl.appendChild(dot);
-          });
-          initControls();
-        }
+        srcs.forEach((src, idx) => {
+          const slide = document.createElement('div');
+          slide.className = 'slide' + (idx === 0 ? ' active' : '');
+          const img = document.createElement('img');
+          img.loading = 'lazy';
+          img.decoding = 'async';
+          img.src = src;
+          img.alt = `Slide ${idx + 1}`;
+          slide.appendChild(img);
+          sliderEl.appendChild(slide);
+          const dot = document.createElement('button');
+          dot.className = 'dot' + (idx === 0 ? ' active' : '');
+          dot.setAttribute('aria-label', `Go to slide ${idx + 1}`);
+          dot.addEventListener('click', () => goTo(idx));
+          dotsEl.appendChild(dot);
+        });
+        initControls();
+        return true;
       }
 
-      candidateNames.forEach(name => {
-        const img = new Image();
-        img.onload = () => { loaded.push(folder + name); pending--; maybeInit(); };
-        img.onerror = () => { pending--; maybeInit(); };
-        img.src = folder + name;
-      });
+      (async function init() {
+        let sources = await loadFromManualList();
+        if (!sources) sources = await loadFromDirectoryListing();
+        if (!sources || sources.length === 0) sources = await loadFromCommonNames();
+        buildSlides(sources || []);
+      })();
 
       let current = 0;
       let timerId = null;
